@@ -1,0 +1,56 @@
+##字符串匹配的改进算法
+##  A,B表示两个字符串,m=length(A),n=length(B)
+#对常见的字符串出现不匹配时，则B中的指针返回B的起点，A的指针往前走一位，那么最坏情况下的时间复杂度为O(n*m)
+##改进方法：当出现不匹配时，B的指针j返回到k位置('p1 p2 ..pk-1'='pj-k+1 ...pj-1'),A的指针不动
+
+import numpy as np
+A='abcdacdac'
+B='cdcd'
+next=np.ones(10000)
+next[0]=0    ##第一个数都是返回的K只能为0
+n=len(B)
+m=len(A)
+i=0
+j=0
+for k in range(n):
+        if(k==0):
+              continue
+        p=k    ##用于对比
+        q=k-1
+        w=q    ##用于记录
+        flag=0
+        while(p!=0):
+            if(B[q]==B[p]):
+                    q-=1
+                    p-=1
+                    if(q==0):  #如果成功读到第一个数，说明匹配
+                        flag=1
+                        break
+                        
+            else:        #如果不相等，说明肯定不匹配
+                    if(q==0):
+                        flag=0
+                        break
+                    q=w-1
+                    w-=1
+                    p=k
+        if(flag==1):
+            next[k]=w
+        else:
+            next[k]=0
+print(next)
+
+while(1):
+        print(1)
+        if(A[i]==B[j]):
+            i+=1
+            j+=1
+        else:
+              j=next[j]
+        if(j==n):
+            print("right")
+            break
+        if(i+n==m):
+            print("wrong")
+            break
+ 
